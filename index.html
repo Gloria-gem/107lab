@@ -26,10 +26,108 @@
 
   <!-- Main Stylesheet File -->
   <link href="static/css/style.css" rel="stylesheet">
+  <style>
+    /* 悬浮窗样式 */
+    /* 悬浮窗样式 */
+    .floating-box {
+      position: fixed;
+      width: 200px;
+      height: 240px;
+      z-index: 999;
+      background-color: white;
+      border: 2px solid #333;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* 关闭按钮 */
+    .close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    /* 二维码图片 */
+    .floating-box img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    /* 文字部分 */
+    .text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 
 <body>
+<div class="floating-box" id="floatingBox">
+    <button class="close-btn" onclick="closeBox()">×</button>
+    <div class="text">欢迎2024级同学报名</div>
+    <img src="./static/images/baoming.png" alt="Scan to Register">
+  </div>
 
+
+  <script>
+    const box = document.getElementById("floatingBox");
+
+    let speedX = 1.2; // 调低速度
+    let speedY = 1.2;
+    let posX = 20;
+    let posY = 20;
+    let isPaused = false; // 是否暂停
+
+    function moveBox() {
+      if (isPaused) return; // 如果暂停则不移动
+
+      const maxX = window.innerWidth - box.clientWidth;
+      const maxY = window.innerHeight - box.clientHeight;
+
+      posX += speedX;
+      posY += speedY;
+
+      if (posX >= maxX || posX <= 0) speedX *= -1;
+      if (posY >= maxY || posY <= 0) speedY *= -1;
+
+      box.style.left = posX + "px";
+      box.style.top = posY + "px";
+
+      requestAnimationFrame(moveBox);
+    }
+
+    // 鼠标悬浮停止
+    box.addEventListener("mouseenter", () => isPaused = true);
+    box.addEventListener("mouseleave", () => {
+      isPaused = false;
+      moveBox(); // 重新启动
+    });
+
+    // 关闭按钮
+    function closeBox() {
+      box.style.display = "none";
+    }
+
+    moveBox(); // 启动动画
+  </script>
   <!--==========================
     Header
   ============================-->
